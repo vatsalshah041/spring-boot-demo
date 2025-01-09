@@ -54,13 +54,15 @@ public class EntryControllerv2 {
 
     @DeleteMapping("id/{myId}")
     public ResponseEntity<?> deletebyId(@PathVariable ObjectId myId){
-        try {
-            entryService.deleteById(myId);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+//            if(entryService.deleteById(myId)) {
+//                return new ResponseEntity<>(true, HttpStatus.OK);
+//            }
+//            else{
+//                return new ResponseEntity<>(false,HttpStatus.NOT_FOUND)
+//            }
+                return new ResponseEntity<>(true, HttpStatus.OK);
+
+
     }
 
     @PutMapping("id/{myid}")
