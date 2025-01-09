@@ -1,21 +1,24 @@
 package com.example.demo.entity;
 
+import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class EntryV2 {
     @Id
-    private String id;
+    private ObjectId id;
+
+    public ObjectId getId() {
+        return id;
+    }
 
     private String content;
 
     private String title;
-    public String getId() {
-        return id;
-    }
 
-    public void setId(String id) {
+
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

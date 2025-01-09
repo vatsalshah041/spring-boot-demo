@@ -1,37 +1,50 @@
 package com.example.demo.controller;
 
 import com.example.demo.entity.Entry;
+import com.example.demo.entity.EntryV2;
+import com.example.demo.service.EntryService;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
 @RestController
-@RequestMapping("/journal")//adds mapping to the whole class
+@RequestMapping("/journalv2")//adds mapping to the whole class
 public class EntryControllerv2 {
 
+    @Autowired
+    private EntryService entryService;
+
     @GetMapping
-    public List<Entry> getAll(){
-        return null;
+    public List<EntryV2> getAll(){
+        return entryService.getEntry();
     }
 
     @PostMapping
-    public boolean createEntry(@RequestBody Entry myEntry) {
+    public boolean createEntry(@RequestBody EntryV2 myEntry) {
+        entryService.saveEntry(myEntry);
         return true;
     }
     @GetMapping("id/{myId}")
-    public Entry getById(@PathVariable  Long myId){
-        return null;
+    public EntryV2 getById(@PathVariable ObjectId myId){
+        return entryService.getEntryById(myId).orElse(null);
     }
 
     @DeleteMapping("id/{myId}")
-    public boolean deletebyId(@PathVariable Long myId){
-        return true;
+    public boolean deletebyId(@PathVariable ObjectId myId){
+         entryService.deleteById(myId);
+         return true;
     }
 
     @PutMapping("id/{myid}")
-    public Entry updatebyId(@PathVariable Long myid,@RequestBody Entry myentry){
-        return null;
+    public EntryV2 updatebyId(@PathVariable ObjectId myid,@RequestBody EntryV2 newentry){
+        EntryV2 old=entryService.getEntryById(myid).orElse(null);
+        if(old!=null){
+            old.setTitle(newentry.getTitle()!=null && !newentry.getTitle().equals("")?newentry.getTitle():old.getTitle());
+            old.setContent(newentry.getContent()!=null && !newentry.getContent().equals("")? newentry.getContent() : old.getContent());
+        }
+        entryService.saveEntry(old);
+        return newentry;
     }
 }
