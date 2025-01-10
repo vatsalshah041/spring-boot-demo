@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.EntryV2;
+import com.example.demo.entity.User;
 import com.example.demo.repository.EntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,13 @@ public class EntryService {
 
     @Autowired
     private EntryRepository entryRepository;
-
-    public void saveEntry(EntryV2 entry){
-        entryRepository.save(entry);
+    @Autowired
+    private UserService userService;
+    public void saveEntry(EntryV2 entry, String userName){
+        User user=userService.findByUserName(userName);
+        EntryV2 saved = entryRepository.save(entry);
+        user.getEntries().add(saved);
+        userService.save(user);
     }
 
     public List<EntryV2> getEntry(){
