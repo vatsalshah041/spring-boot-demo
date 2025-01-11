@@ -59,8 +59,13 @@ public class UserEntryController {
     }
     //this wil delte from EntryV2 collections but the reference in the Users is not delted as cascade delete is not done in monogdb
 
-    @DeleteMapping("id/{myId}")
-    public ResponseEntity<?> deletebyId(@PathVariable ObjectId myId){
+    @DeleteMapping("/{userName}/{myid}")
+    public ResponseEntity<?> deletebyId(@PathVariable String userName,@PathVariable ObjectId myid){
+            entryService.deleteById(myid);
+            User user=userService.findByUserName(userName);
+            user.getEntries().removeIf(x->x.getId().equals(myid));
+            userService.save(user);
+
 //            if(entryService.deleteById(myId)) {
 //                return new ResponseEntity<>(true, HttpStatus.OK);
 //            }
