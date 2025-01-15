@@ -30,8 +30,19 @@ public class EntryService {
     public Optional<EntryV2> getEntryById(ObjectId id){
         return entryRepository.findById(id);
     }
-    public void deleteById(ObjectId id){
+    public void deleteById(ObjectId id, String userName){
+        User userDetail=userService.findByUserName(userName);
+        System.out.println(userDetail.getEntries());
+        boolean delete=userDetail.getEntries().removeIf(x->x.getId().toString().equals(id));
+        if(delete){
+            System.out.println("Deleted");
+        }
+        else{
+            System.out.println("Not deleted");
+        }
         entryRepository.deleteById(id);
+
+        userService.save(userDetail);
     }
     public void updateById(EntryV2 entry){
         entryRepository.save(entry);

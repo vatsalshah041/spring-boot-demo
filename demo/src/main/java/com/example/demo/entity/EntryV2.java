@@ -22,9 +22,4 @@ public class EntryV2 {
     @NonNull
     private String title;
 
-
-
-
-
-
 }

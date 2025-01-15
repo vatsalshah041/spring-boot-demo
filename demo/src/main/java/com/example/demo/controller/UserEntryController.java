@@ -61,19 +61,12 @@ public class UserEntryController {
 
     @DeleteMapping("/{userName}/{myid}")
     public ResponseEntity<?> deletebyId(@PathVariable String userName,@PathVariable ObjectId myid){
-            entryService.deleteById(myid);
-            User user=userService.findByUserName(userName);
-            user.getEntries().removeIf(x->x.getId().equals(myid));
-            userService.save(user);
-
-//            if(entryService.deleteById(myId)) {
-//                return new ResponseEntity<>(true, HttpStatus.OK);
-//            }
-//            else{
-//                return new ResponseEntity<>(false,HttpStatus.NOT_FOUND)
-//            }
+            entryService.deleteById(myid,userName);
+//            User user=userService.findByUserName(userName);
+//            user.getEntries().removeIf(x->x.getId().equals(myid));
+//            userService.save(user);
         return new ResponseEntity<>(true, HttpStatus.OK);
-
+        
 
     }
 
