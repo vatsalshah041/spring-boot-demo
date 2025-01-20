@@ -57,7 +57,7 @@ public class UserEntryController {
         }
 
     }
-    //this wil delte from EntryV2 collections but the reference in the Users is not delted as cascade delete is not done in monogdb
+    //this wil delete from EntryV2 collections but the reference in the Users is not deleted as cascade delete is not done in mongo db
 
     @DeleteMapping("/{userName}/{myid}")
     public ResponseEntity<?> deletebyId(@PathVariable String userName,@PathVariable ObjectId myid){
@@ -65,22 +65,22 @@ public class UserEntryController {
 //            User user=userService.findByUserName(userName);
 //            user.getEntries().removeIf(x->x.getId().equals(myid));
 //            userService.save(user);
-        return new ResponseEntity<>(true, HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.NO_CONTENT);
         
 
     }
 
-//    @PutMapping("id/{myid}")
-//    public ResponseEntity<EntryV2> updatebyId(@PathVariable ObjectId myid,@RequestBody EntryV2 newentry){
-//        Optional<EntryV2> old=entryService.getEntryById(myid);
-//        if(old.isPresent()){
-//            old.get().setTitle(newentry.getTitle()!=null && !newentry.getTitle().equals("")?newentry.getTitle(): old.get().getTitle());
-//            old.get().setContent(newentry.getContent()!=null && !newentry.getContent().equals("")? newentry.getContent() : old.get().getContent());
-//            entryService.saveEntry(old.orElse(null), userName);
-//            return new ResponseEntity<>(old.get(),HttpStatus.OK);
-//        }
-//        else{
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//    }
+    @PutMapping("/{userName}/{myid}")
+    public ResponseEntity<EntryV2> updatebyId(@PathVariable ObjectId myid,@RequestBody EntryV2 newentry){
+        Optional<EntryV2> old=entryService.getEntryById(myid);
+        if(old.isPresent()){
+            old.get().setTitle(newentry.getTitle()!=null && !newentry.getTitle().equals("")?newentry.getTitle(): old.get().getTitle());
+            old.get().setContent(newentry.getContent()!=null && !newentry.getContent().equals("")? newentry.getContent() : old.get().getContent());
+            entryService.saveEntry(old.orElse(null), userName);
+            return new ResponseEntity<>(old.get(),HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

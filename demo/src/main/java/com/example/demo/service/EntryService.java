@@ -6,6 +6,7 @@ import com.example.demo.repository.EntryRepository;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,8 @@ public class EntryService {
     private EntryRepository entryRepository;
     @Autowired
     private UserService userService;
+
+    @Transactional //treats everything as single operation if one fails everything is restored back..if want to be successful all has to be completed
     public void saveEntry(EntryV2 entry, String userName){
         User user=userService.findByUserName(userName);
         EntryV2 saved = entryRepository.save(entry);
@@ -32,17 +35,11 @@ public class EntryService {
     }
     public void deleteById(ObjectId id, String userName){
         User userDetail=userService.findByUserName(userName);
-        System.out.println(userDetail.getEntries());
-        boolean delete=userDetail.getEntries().removeIf(x->x.getId().toString().equals(id));
-        if(delete){
-            System.out.println("Deleted");
-        }
-        else{
-            System.out.println("Not deleted");
-        }
+        userDetail.getEntries().removeIf(x->x.getId().toString().equals(id));
+        userService.save(userDetail);
+
         entryRepository.deleteById(id);
 
-        userService.save(userDetail);
     }
     public void updateById(EntryV2 entry){
         entryRepository.save(entry);
