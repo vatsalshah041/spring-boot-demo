@@ -70,17 +70,17 @@ public class UserEntryController {
 
     }
 
-    @PutMapping("/{userName}/{myid}")
-    public ResponseEntity<EntryV2> updatebyId(@PathVariable ObjectId myid,@RequestBody EntryV2 newentry){
-        Optional<EntryV2> old=entryService.getEntryById(myid);
-        if(old.isPresent()){
-            old.get().setTitle(newentry.getTitle()!=null && !newentry.getTitle().equals("")?newentry.getTitle(): old.get().getTitle());
-            old.get().setContent(newentry.getContent()!=null && !newentry.getContent().equals("")? newentry.getContent() : old.get().getContent());
-            entryService.saveEntry(old.orElse(null), userName);
-            return new ResponseEntity<>(old.get(),HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
+//    @PutMapping("/{userName}/{myid}")
+//    public ResponseEntity<EntryV2> updatebyId(@PathVariable ObjectId myid,@RequestBody EntryV2 newentry){
+//        Optional<EntryV2> old=entryService.getEntryById(myid);
+//        if(old.isPresent()){
+//            old.get().setTitle(newentry.getTitle()!=null && !newentry.getTitle().equals("")?newentry.getTitle(): old.get().getTitle());
+//            old.get().setContent(newentry.getContent()!=null && !newentry.getContent().equals("")? newentry.getContent() : old.get().getContent());
+//            entryService.saveEntry(old.orElse(null), userName);
+//            return new ResponseEntity<>(old.get(),HttpStatus.OK);
+//        }
+//        else{
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//    }
 }

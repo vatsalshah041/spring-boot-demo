@@ -21,10 +21,19 @@ public class EntryService {
 
     @Transactional //treats everything as single operation if one fails everything is restored back..if want to be successful all has to be completed
     public void saveEntry(EntryV2 entry, String userName){
-        User user=userService.findByUserName(userName);
-        EntryV2 saved = entryRepository.save(entry);
-        user.getEntries().add(saved);
-        userService.save(user);
+
+        try{
+            User user=userService.findByUserName(userName);
+            EntryV2 saved = entryRepository.save(entry);
+            user.getEntries().add(saved);
+            userService.save(user);
+        }
+        catch (Exception e){
+            System.out.println(e);
+            throw new RuntimeException("error occured");
+        }
+
+
     }
 
     public List<EntryV2> getEntry(){
